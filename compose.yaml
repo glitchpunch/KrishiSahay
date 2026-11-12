@@ -1,0 +1,30 @@
+
+services:
+  indicedge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: indicedge-api
+    restart: unless-stopped
+
+    ports:
+      - "127.0.0.1:${INDICEDGE_HOST_PORT:-8787}:8000"
+
+    environment:
+      NODE_ENV: production
+      PORT: "8000"
+      HOST: "0.0.0.0"
+      LOCAL_MODE: "false"
+      MAX_DAILY_CALLS: ${MAX_DAILY_CALLS:-30}
+      PRUNE_RUN_BUDGET_USD: ${PRUNE_RUN_BUDGET_USD:-0.02}
+
+      DATABASE_URL: ${DATABASE_URL:?DATABASE_URL is required}
+
+      SUPABASE_URL: ${SUPABASE_URL:?SUPABASE_URL is required}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY:?SUPABASE_ANON_KEY is required}
+
+      PRUNE_API_KEY: ${PRUNE_API_KEY:-}
+      PRUNE_MODEL: ${PRUNE_MODEL:-}
+
+      FRONTEND_ORIGINS: ${FRONTEND_ORIGINS:-http://localhost:8787,http://127.0.0.1:8787}
